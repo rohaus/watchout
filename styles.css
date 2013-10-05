@@ -1,12 +1,10 @@
 
-body {
-}
-
 .container {
+  background:url(http://fc01.deviantart.net/fs44/i/2009/141/f/0/Abstract_Background_1_by_nyte.png);
   position: relative;
   box-shadow: 0px 0px 10px rgba(0,0,0,1);
   width: 700px;
-  background: white;
+  /*background: white;*/
   padding: 40px;
   margin-top: 40px;
   margin-bottom: 40px;
@@ -46,5 +44,5 @@ body {
 }
 
 circle.area {
-  fill: #ccc;
+  /*fill: #ccc;*/
 }
