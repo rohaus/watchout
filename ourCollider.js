@@ -18,23 +18,71 @@
 
   gameBoard = d3.select('.container').append('svg:svg').attr('width', gameOptions.width).attr('height', gameOptions.height);
 
-  updateScore = function() {
-    return d3.select('#current-score').text(gameStats.score.toString());
-  };
 
-  updateBestScore = function() {
-    gameStats.bestScore = _.max([gameStats.bestScore, gameStats.score]);
-    return d3.select('#best-score').text(gameStats.bestScore.toString());
-  };
+  var svgElement = d3.select('.container').select('svg');
+  var enemyData = _.range(0,gameOptions.nEnemies).map(function(i){
+    return {id: i, x:Math.random()*100,y:Math.random()*100};
+  });
+  var listOfEnemies = d3.selectAll('circle').data(enemyData, function(d) {return d.id;});
 
-    Player = (function() {
 
-    Player.prototype.path = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0ODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiA8IS0tIENyZWF0ZWQgd2l0aCBTVkctZWRpdCAtIGh0dHA6Ly9zdmctZWRpdC5nb29nbGVjb2RlLmNvbS8gLS0+CiA8Zz4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPGVsbGlwc2Ugcnk9IjY0IiByeD0iOTIiIGlkPSJzdmdfMSIgY3k9IjEyMSIgY3g9IjIyOSIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2U9IiMwMDAwMDAiIGZpbGw9IiNGRjAwMDAiLz4KICA8ZWxsaXBzZSByeT0iMTQiIHJ4PSIxNyIgaWQ9InN2Z18yIiBjeT0iOTYiIGN4PSIyMDQiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlPSIjMDAwMDAwIiBmaWxsPSIjRkYwMDAwIi8+CiAgPGVsbGlwc2Ugcnk9IjE0IiByeD0iMTMiIGlkPSJzdmdfMyIgY3k9Ijk1IiBjeD0iMjU1IiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZT0iIzAwMDAwMCIgZmlsbD0iI0ZGMDAwMCIvPgogIDxlbGxpcHNlIHJ5PSIxMiIgcng9IjE2IiBpZD0ic3ZnXzQiIGN5PSIxMjkiIGN4PSIyMjYiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlPSIjMDAwMDAwIiBmaWxsPSIjRkYwMDAwIi8+CiA8L2c+Cjwvc3ZnPg=='
 
-    Player.prototype.x = 0;
+  svgElement.selectAll('circle').data(enemyData).enter().append('circle');
+  svgElement.selectAll('circle').attr("cx",function(enemyData){return axes.x(enemyData.x);})
+    .attr("cy",function(enemyData){return axes.y(enemyData.y);}).attr("r",10);
 
-    Player.prototype.y = 0;
+  listOfEnemies.transition().duration(500);
 
-    Player.prototype.angle = 0;
 
-    Player.prototype.r = 5;
+  // return enemies.transition().duration(500).attr('r', 10).transition().duration(2000).tween('custom', tweenWithCollisionDetection);
+
+
+  // render = function(enemy_data) {
+  //   // var checkCollision, enemies, onCollision, tweenWithCollisionDetection;
+  //   // enemies = gameBoard.selectAll('circle.enemy').data(enemy_data, function(d) {
+  //   //   return d.id;
+  //   // });
+  //   // enemies.enter().append('svg:circle').attr('class', 'enemy').attr('cx', function(enemy) {
+  //   //   return axes.x(enemy.x);
+  //   // }).attr('cy', function(enemy) {
+  //   //   return axes.y(enemy.y);
+  //   // }).attr('r', 0);
+  //   // enemies.exit().remove();
+  //   checkCollision = function(enemy, collidedCallback) {
+  //     return _(players).each(function(player) {
+  //       var radiusSum, separation, xDiff, yDiff;
+  //       radiusSum = parseFloat(enemy.attr('r')) + player.r;
+  //       xDiff = parseFloat(enemy.attr('cx')) - player.x;
+  //       yDiff = parseFloat(enemy.attr('cy')) - player.y;
+  //       separation = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+  //       if (separation < radiusSum) return collidedCallback(player, enemy);
+  //     });
+  //   };
+  //   onCollision = function() {
+  //     updateBestScore();
+  //     gameStats.score = 0;
+  //     return updateScore();
+  //   };
+  //   tweenWithCollisionDetection = function(endData) {
+  //     var endPos, enemy, startPos;
+  //     enemy = d3.select(this);
+  //     startPos = {
+  //       x: parseFloat(enemy.attr('cx')),
+  //       y: parseFloat(enemy.attr('cy'))
+  //     };
+  //     endPos = {
+  //       x: axes.x(endData.x),
+  //       y: axes.y(endData.y)
+  //     };
+  //     return function(t) {
+  //       var enemyNextPos;
+  //       checkCollision(enemy, onCollision);
+  //       enemyNextPos = {
+  //         x: startPos.x + (endPos.x - startPos.x) * t,
+  //         y: startPos.y + (endPos.y - startPos.y) * t
+  //       };
+  //       return enemy.attr('cx', enemyNextPos.x).attr('cy', enemyNextPos.y);
+  //     };
+  //   };
+  //   return enemies.transition().duration(500).attr('r', 10).transition().duration(2000).tween('custom', tweenWithCollisionDetection);
+  // };
